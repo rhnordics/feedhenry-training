@@ -1,32 +1,43 @@
-##Lab 02 - Hello World Client App
+##Lab 02 - Hello World Cloud App
 
-### Instructions
-1. Go to the **Editor** section of the **Cordova Light App**
-2. Add a new button to index.html for the "bye" REST endpoint. The html will look like this:
+1. Login to FeedHenry
+2. Navigate to **Projects** area
+3. Click on **New Project**
+4. Select **Hello World Project** template
+5. Click on **Finish**
+6. Explore the project
+7. Go to the **Editor** section of **Cloud App**
+8. Modify **application.js** and add the **bye** REST endpoint:
 ```javascript
-<button id="say_hello" type="button" class="say-hello-button">Say Hello From The Cloud</button>
-<button id="say_bye" type="button" class="say-hello-button">Say Bye From The Cloud</button>
+app.use('/hello', require('./lib/hello.js')());
+app.use('/bye', require('./lib/bye.js')());
 ```
-3. Add the following snippet to the end of **www/hello.js**:
+9. Create a new file called **bye.js** in *lib* folder with the following content:
 
 ```javascript
-document.getElementById('say_bye').onclick = function () {
-  document.getElementById('cloudResponse').innerHTML = "<p>Calling Cloud.....</p>";
-  $fh.cloud(
-      {
-        path: 'bye?bye=' + document.getElementById('hello_to').value,
-        method: 'GET'
-      },
-      function (res) {
-        document.getElementById('cloudResponse').innerHTML = "<p>" + res.msg + "</p>";
-      },
-      function (code, errorprops, params) {
-        alert('An error occured: ' + code + ' : ' + errorprops);
-      }
-  );
-};
+var express = require('express');
+var bodyParser = require('body-parser');
+var cors = require('cors');
+
+function byeRoute() {
+  var bye = new express.Router();
+  bye.use(cors());
+  bye.use(bodyParser());
+
+  bye.get('/', function(req, res) {
+    console.log(new Date(), 'In bye route GET / req.query=', req.query);
+    var world = req.query && req.query.bye ? req.query.bye : 'World';
+
+    // see http://expressjs.com/4x/api.html#res.json
+    res.json({msg: 'Bye ' + world});
+  });
+
+  return bye;
+}
+
+module.exports = byeRoute;
 ```
-4. Verify the changes in the preview panel
-5. Go to **Build** section and create binaries for your device. Notice the selection of Cloud App.
-6. Install the app on your device and verify it works!
-7. [OPTIONAL] Change the app icon for your device, rebuild and reinstall the app.
+10. Deploy the **Cloud App**
+11. Verify the the **bye** endpoint works in the browser by going to:
+http://appdomain/bye?bye=North
+12. [OPTIONAL] Modify README.md to generate docs for the **bye** REST endpoint
