@@ -1,4 +1,4 @@
-##Lab 02 - Hello World Cloud App
+## Lab 02 - Hello World Cloud App
 
 1. Login to FeedHenry
 2. Navigate to **Projects** area
@@ -12,7 +12,7 @@
 app.use('/hello', require('./lib/hello.js')());
 app.use('/bye', require('./lib/bye.js')());
 ```
-9. Create a new file called **bye.js** in *lib* folder with the following content:
+9. Create a new file called **bye.js** in the **lib** folder with the following content:
 
 ```javascript
 var express = require('express');

@@ -1,4 +1,4 @@
-##Lab 03 - Hello World Client App
+## Lab 03 - Hello World Client App
 
 ### Instructions
 1. Go to the **Editor** section of the **Cordova Light App**
