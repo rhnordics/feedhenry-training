@@ -6,28 +6,28 @@
 3. Select **AngularJS Hello World Project** template and give your project a unique name
 4. Click on **Finish**
 5. Navigate to **Git Quickstart**
-6. Clone the client and cloud apps onto your local environment
+6. Clone the app and cloud apps onto your local environment
 
   ```shell
   git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Cloud-App.git triply-cloud-app
-  git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Triply.git triply-client
+  git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Triply.git triply-app
   ```
 
 Note that the git repo url will be different from the ones above.
 
-7. Copy the provided client and cloud-app project onto the cloned git repos
+7. Copy the provided app and cloud-app project onto the cloned git repos
 
   ```shell
-  cp -r lab-04/support/triply-client/ triply-client
+  cp -r lab-04/support/triply-app/ triply-app
   cp -r lab-04/support/triply-cloud-app/ triply-cloud-app
   ```
 
-8. Commit and push the changes on the client app to the remote git repo
+8. Commit and push the changes on app to the remote git repo
 
   ```shell
-  cd triply-client
+  cd triply-app
   git add .
-  git commit -a -m "client app added"
+  git commit -a -m "cordova app added"
   git push origin master
   ```
 
@@ -42,9 +42,11 @@ Note that the git repo url will be different from the ones above.
 
 11. Check out the preview in FeedHenry Studio to verify the app is deployed correctly.
 
-  [PIC preview-trips-empty.png]
 
-10. Explore **application.js**. There are two routes defined for working with User and Trips:
+  ![Triply Preview](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/preview-trips-empty.png?token=ABHtlr2dPvzZZUkbA0Ts1GKvjye2-cEgks5VbcP7wA%3D%3D)
+
+
+10. In the root of the cloud app, explore **application.js**. There are two routes defined for working with User and Trips:
 
   ```javascript
   app.use('/trips', require('./lib/trips.js')());
@@ -107,16 +109,17 @@ Open and check out **lib/trips.js**.
   });
 ```
 
-12. Commit and push the changes to the gir repository.
+12. Commit and push the changes to the git repository.
 
   ```shell
+  cd triply-cloud-app
   git commit -a -m "trips req handler updated"
   git push
   ```
 
-13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the project in FeedHenry Studio.
+13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the cloud app project in FeedHenry Studio.
 
-  [PIC project-host-url.png]
+  ![Cloud App Host URL](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/project-host-url.png?token=ABHtltfUsTSrY8-RWKuHYK-BgwSCOOa_ks5VbcXswA%3D%3D)
 
   Add Trip
   ```shell
@@ -131,10 +134,9 @@ Open and check out **lib/trips.js**.
   curl https://projectid.feedhenry.com/trips
   # pretty print if python 2.6+ installed
   curl https://projectid.feedhenry.com/trips | python -m json.tool
-
   ```
 
-14. Now you should be able to add and list Trips through the client app in the preview panel or on your device.
+14. Now you should be able to add and list Trips through the app in the preview panel or on your device.
 
 15. OPTIONAL Add the *users* REST API for registering users with *name*, *mobile*, *code*
 and *verified* attributes and verifying their identity through the generate verification code.
@@ -216,7 +218,16 @@ and *verified* attributes and verifying their identity through the generate veri
   });
 ```
 
-16. OPTIONAL Verify the *users* API works
+16. Commit and push the changes to the git repository.
+
+  ```shell
+  cd triply-cloud-app
+  git commit -a -m "users req handler updated"
+  git push
+  ```
+
+
+17. OPTIONAL Verify the *users* API works
 
   Register User
   ```shell

@@ -1,0 +1,31 @@
+<link rel="import" href="components/polymer/polymer.html">
+
+<polymer-element name="app-globals">
+  <script>
+  (function() {
+    var values = {
+      user: {
+        id: 1,
+        name: 'Siamak',
+        mobile: '+46731835553',
+        verified: false
+      }
+    }
+
+    Polymer({
+      ready: function() {
+        this.values = values;
+      },
+      save: function() {
+        localStorage.user = JSON.stringify(this.values.user);
+      },
+      load: function() {
+        this.values.user = JSON.parse(localStorage.user);
+      },
+      isUserVerified: function() {
+        return localStorage.user && JSON.parse(localStorage.user).verified;
+      }
+    });
+  })();
+  </script>
+</polymer-element>
