@@ -6,32 +6,21 @@
 3. Select **AngularJS Hello World Project** template and give your project a unique name
 4. Click on **Finish**
 5. Navigate to **Git Quickstart**
-6. Clone the app and cloud apps onto your local environment
+6. Clone the cloud app into your local environment
 
   ```shell
   git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Cloud-App.git triply-cloud-app
-  git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Triply.git triply-app
   ```
 
 Note that the git repo url will be different from the ones above.
 
-7. Copy the provided app and cloud-app project onto the cloned git repos
+7. Copy the provided cloud-app project onto the cloned git repos
 
   ```shell
-  cp -r lab-04/support/triply-app/ triply-app
   cp -r lab-04/support/triply-cloud-app/ triply-cloud-app
   ```
 
-8. Commit and push the changes on app to the remote git repo
-
-  ```shell
-  cd triply-app
-  git add .
-  git commit -a -m "cordova app added"
-  git push origin master
-  ```
-
-9. Commit and push the changes on the cloud app to the remote git repo
+8. Commit and push the changes on the cloud app to the remote git repo
 
   ```shell
   cd triply-cloud-app
@@ -39,12 +28,6 @@ Note that the git repo url will be different from the ones above.
   git commit -a -m "cloud app added"
   git push origin master
   ```
-
-11. Check out the preview in FeedHenry Studio to verify the app is deployed correctly.
-
-
-  ![Triply Preview](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/preview-trips-empty.png?token=ABHtlr2dPvzZZUkbA0Ts1GKvjye2-cEgks5VbcP7wA%3D%3D)
-
 
 10. In the root of the cloud app, explore **application.js**. There are two routes defined for working with User and Trips:
 
