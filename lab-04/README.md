@@ -1,4 +1,4 @@
-## Lab 04 - mBaaS APIs - Data Storage
+## Lab 04 - mBaaS APIs - Database Storage
 
 ### Instructions
 1. Navigate to **Projects** area
@@ -12,7 +12,7 @@
   git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Cloud-App.git triply-cloud-app
   ```
 
-Note that the git repo url will be different from the ones above.
+Note that the git repo url will be different from the one above.
 
 7. Copy the provided cloud-app project onto the cloned git repos
 
@@ -121,109 +121,6 @@ Open and check out **lib/trips.js**.
 
 14. Now you should be able to add and list Trips through the app in the preview panel or on your device.
 
-15. OPTIONAL Add the *users* REST API for registering users with *name*, *mobile*, *code*
-and *verified* attributes and verifying their identity through the generate verification code.
+15. OPTIONAL Use the Cache mBaaS API (*$fh.cache*) to cache the list of *Trip*s. Make sure the list is invalidated when a new *Trip* object is created. You can find more details on the Cache API in FeedHenry Docs:
 
-  Register
-  ```javascript
-  var name = req.body.name;
-  var mobile = req.body.mobile;
-  // random number as verification code
-  var code = Math.round(Math.random() * (999999 - 100000) + 100000);
-  console.log("code = " + code);
-
-  var options = {
-    "act": "create",
-    "type": "user",
-    "fields": {
-      "name": name,
-      "mobile": mobile,
-      "code": code,
-      "verified": false
-    }
-  };
-
-  $fh.db(options, function (err, data) {
-    if (err) {
-      console.error("Error " + err);
-      res.json({"result": "error", "message":  err });
-    } else {
-      var user = data.fields;
-      user.id = data.guid;
-
-      res.json({"result": "success", "user":  user });
-    }
-  });
-  ```
-
-  Verify
-
-```javascript
-  var options = {
-      "act": "read",
-      "type": "user",
-      "guid": req.body.id
-  }
-
-  $fh.db(options, function (err, data) {
-    if (err) {
-      console.error("Error " + err);
-      res.json({"result": "error", "message":  err });
-    } else {
-      if (data.fields.code == req.body.code) {
-        // update user
-        options = {
-          "act": "update",
-          "type": "user",
-          "guid": req.body.id,
-          "fields": {
-            "verified": true
-          }
-        };
-
-        $fh.db(options, function (err, data) {
-          if (err) {
-             // handle error
-             res.json({"result": "fail", "msg":  'Something went wrong' });
-             return;
-          } else {
-            // handle success
-          }
-        });
-
-
-        res.json({"result": "success"});
-
-      } else {
-        res.json({"result": "fail", "msg":  'Invalid code' });
-      }
-    }
-  });
-```
-
-16. Commit and push the changes to the git repository.
-
-  ```shell
-  cd triply-cloud-app
-  git commit -a -m "users req handler updated"
-  git push
-  ```
-
-
-17. OPTIONAL Verify the *users* API works
-
-  Register User
-  ```shell
-  curl -X POST \
-   -H 'Content-Type: application/json' \
-   -d '{"name":"Sarah", "mobile":"+46731112222"}' \
-   https://projectid.feedhenry.com/users/register
-  ```
-
-  Verify User
-  ```shell
-  curl -X POST \
-   -H 'Content-Type: application/json' \
-   -d '{"id":"REPLACE-WITH-USER-ID", "code":"REPLACE-WITH-CODE"}' \
-   https://projectid.feedhenry.com/users/verify
-  ```
+  http://docs.feedhenry.com/v3/api/api_cache.html
