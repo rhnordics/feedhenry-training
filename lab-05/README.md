@@ -64,7 +64,7 @@ Note that the git repo url will be different from the one above.
 
 8. Verify adding new Trips and Trip list works propertly in the Preview panel in FeedHenry Studio. Alternative install the app on your device to verify the functionality.
 
-9. The app currently doesn't include user registration. Enable the registration view by add the following snippet to the end of the last ```<script>``` block. Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
+9. The app currently doesn't include user registration. Enable the registration view by adding the following snippet to the end of the last ```<script>``` block. Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
 
   ```javascript
   window.addEventListener('polymer-ready', function(e) {
@@ -77,4 +77,9 @@ Note that the git repo url will be different from the one above.
   });
   ```
 
-9. Commit and push the changes the remote git repo and check out the app in the Preview
+9. Commit and push the changes the remote git repo and check out the app in the Preview. Try to register with your name and mobile number. The backend is not connected to any SMS service yet. In order to verify your account go to FeedHenry Studio and *Data Browser* in triply-cloud-app. Find the verification code and enter the code to verify your account.
+
+![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-register.png?raw=true)
+![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-verification.png?raw=true)
+
+10. OPTIONAL Install the app on your phone!
