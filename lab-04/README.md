@@ -96,7 +96,7 @@ Open and check out **lib/trips.js**.
 
 13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the cloud app project in FeedHenry Studio.
 
-  ![Cloud App Host URL](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/project-host-url.png?token=ABHtltfUsTSrY8-RWKuHYK-BgwSCOOa_ks5VbcXswA%3D%3D)
+  ![Cloud App Host URL](https://github.com/rhnordics/feedhenry-training/blob/master/images/project-host-url.png?raw=true)
 
   Add Trip
   ```shell
