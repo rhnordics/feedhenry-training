@@ -20,7 +20,7 @@ Note that the git repo url will be different from the one above.
   cp -r lab-04/support/triply-cloud-app/ triply-cloud-app
   ```
 
-8. Commit and push the changes on the cloud app to the remote git repo
+8. Commit and push the changes to the remote git repo
 
   ```shell
   cd triply-cloud-app
@@ -92,13 +92,7 @@ Open and check out **lib/trips.js**.
   });
 ```
 
-12. Commit and push the changes to the git repository.
-
-  ```shell
-  cd triply-cloud-app
-  git commit -a -m "trips req handler updated"
-  git push
-  ```
+12. Commit and push the changes to the remote git repo.
 
 13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the cloud app project in FeedHenry Studio.
 
