@@ -27,7 +27,7 @@ Note that the git repo url will be different from the one above.
 
 4. Check out the app in the Preview panel in FeedHenry Studio and try to create a new Trip. The Trip list won't get updated since it's not wired to the backend (that's what you will be doing next!)
 
-![Triply App](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/preview-trips-empty.png?token=ABHtlpcjzQ2gFj5kgppNLho2OMqANTmBks5VbrA7wA%3D%3D)
+![Triply App](https://raw.githubusercontent.com/rhnordics/feedhenry-training/master/images/preview-trips-empty.png?token=ABHtlmaz4jL8WlezCCJT_TMwNPmuDS0hks5VeU1IwA%3D%3D)
 
 
 5. Open *www/trip-list.html* and add a cloud call using the Cloud API (*$fh.cloud*) in order to retrieve the list of Trips.
@@ -77,4 +77,4 @@ Note that the git repo url will be different from the one above.
   });
   ```
 
-9. Commit and push the changes the remote git repo and check out the app in the Preview 
+9. Commit and push the changes the remote git repo and check out the app in the Preview
