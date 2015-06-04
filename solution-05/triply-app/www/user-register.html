@@ -1,0 +1,107 @@
+<link rel="import" href="components/polymer/polymer.html">
+<link rel="import" href="components/paper-elements/paper-elements.html">
+<link rel="import" href="trip-card.html">
+<link rel="import" href="app-globals.html">
+
+<polymer-element name="user-register">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+
+    paper-input {
+      width: 100%;
+    }
+
+    paper-button.blue {
+      color: #4285f4;
+    }
+
+    paper-button[raised].blue {
+      background: #4285f4;
+      color: #fff;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    html /deep/ paper-dropdown-menu {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    html /deep/ core-menu {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    paper-dropdown-menu {
+      width: 100%;
+    }
+
+    paper-item {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    html /deep/ core-collapse {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+
+    html /deep/ core-overlay {
+      border: 1px solid #ccc;
+      padding: 8px;
+      background: #fff;
+    }
+
+
+    </style>
+    <app-globals id="globals"></app-globals>
+    <div layout vertical center>
+      <trip-card>
+        <h2>Register</h2>
+        <paper-input label="Name" value="{{name}}" required></paper-input>
+        <paper-input label="Mobile" value="{{mobile}}" required></paper-input>
+
+        <div class="buttons">
+          <paper-button id="register" raised class="blue" on-tap="{{register}}">Register</paper-button>
+        </div>
+      </trip-card>
+    </div>
+  </template>
+
+  <script>
+  Polymer({
+    register: function() {
+      var pages = document.querySelector('#pages');
+      var verify = document.querySelector('#user-verify');
+      var self = this;
+
+      $fh.cloud({
+        "path": "/users/register",
+        "method": "POST",
+        "data": { "name": this.name, "mobile": this.mobile},
+        "contentType": "application/json",
+        "timeout": 10000
+      }, function(res) {
+        self.$.globals.values.user.mobile = res.user.mobile;
+        self.$.globals.values.user.name = res.user.name;
+        self.$.globals.values.user.id = res.user.id;
+        self.$.globals.values.user.verified = false;
+
+        verify.mobile = res.user.mobile;
+        pages.selected = 3; // change to verification page
+
+      }, function(msg,err) {
+        // handle error
+        alert(err);
+      });
+    },
+  });
+  </script>
+</polymer-element>
