@@ -8,7 +8,7 @@
   git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-App.git triply-app
   ```
 
-Note that the git repo url will be different from the one above.
+  Note that the git repo url will be different from the one above.
 
 2. Copy the provided app project onto the cloned git repos
 

@@ -48,7 +48,7 @@ The registration form currently generates a verification code and persist it in 
   res.json({"result": "success", "user":  user });
   ```
 
-You can read more on *$fh.service* API in FeedHenry Docs: http://docs.feedhenry.com/v3/api/cloud_api.html#cloud_api-_fh_service
+  You can read more on *$fh.service* API in FeedHenry Docs: http://docs.feedhenry.com/v3/api/cloud_api.html#cloud_api-_fh_service
 
 9. Commit and push the changes to the remote git repo
 

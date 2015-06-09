@@ -2,10 +2,15 @@
 
 ### Instructions
 1. Navigate to **Projects** area
+
 2. Click on **New Project**
+
 3. Select **AngularJS Hello World Project** template and give your project a unique name
+
 4. Click on **Finish**
+
 5. Navigate to **Git Quickstart**
+
 6. Clone the cloud app into your local environment
 
   ```shell
@@ -36,7 +41,7 @@ Note that the git repo url will be different from the one above.
   app.use('/users', require('./lib/users.js')());
   ```
 
-Open and check out **lib/trips.js**.
+  Open and check out **lib/trips.js**.
 
 11. Add a *POST* request handler that uses the mBaaS Database Storage API (*$fh.db*) to create a Trip object using the query parameters *from*, *to*, *date*, *userId* and *userName*. The Trip object is persisted in a MongoDB instance on FeedHenry platform.
 
