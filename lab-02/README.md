@@ -49,6 +49,6 @@
 10. Deploy the **Cloud App**
 
 11. Verify the the **bye** endpoint works in the browser by going to:
-http://appdomain/bye?bye=North
+*http://appdomain/bye?bye=North*
 
-12. [OPTIONAL] Modify README.md to generate docs for the **bye** REST endpoint
+12. **OPTIONAL** Modify *README.md* to generate docs for the */bye* REST endpoint

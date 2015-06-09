@@ -47,9 +47,9 @@
 
 12. Click on **Finish**
 
-13. Click on "Developer Area for this Project"
+13. Click on **Developer Area for this Project**
 
-14. Go to "Build" section to build and install the App Form on your device.
+14. Go to **Build** section to build and install the App Form on your device.
 
 15. Fill the form on your device and submit the claim.
 

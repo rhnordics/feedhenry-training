@@ -17,7 +17,7 @@
   git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Cloud-App.git triply-cloud-app
   ```
 
-Note that the git repo url will be different from the one above.
+  Note that the git repo url will be different from the one above.
 
 7. Copy the provided cloud-app project onto the cloned git repos
 
@@ -34,14 +34,14 @@ Note that the git repo url will be different from the one above.
   git push origin master
   ```
 
-10. In the root of the cloud app, explore **application.js**. There are two routes defined for working with User and Trips:
+10. In the root of the cloud app, explore *application.js*. There are two routes defined for working with User and Trips:
 
   ```javascript
   app.use('/trips', require('./lib/trips.js')());
   app.use('/users', require('./lib/users.js')());
   ```
 
-  Open and check out **lib/trips.js**.
+  Open and explore *lib/trips.js*.
 
 11. Add a *POST* request handler that uses the mBaaS Database Storage API (*$fh.db*) to create a Trip object using the query parameters *from*, *to*, *date*, *userId* and *userName*. The Trip object is persisted in a MongoDB instance on FeedHenry platform.
 
@@ -120,6 +120,6 @@ Note that the git repo url will be different from the one above.
 
 14. Now you should be able to add and list Trips through the app in the preview panel or on your device.
 
-15. OPTIONAL Use the Cache mBaaS API (*$fh.cache*) to cache the list of *Trip*s. Make sure the list is invalidated when a new *Trip* object is created. You can find more details on the Cache API in FeedHenry Docs:
+15. **OPTIONAL** Use the Cache mBaaS API (*$fh.cache*) to cache the list of trips. Make sure the list is invalidated when a new *Trip* object is created. You can find more details on the Cache API in FeedHenry Docs:
 
   http://docs.feedhenry.com/v3/api/api_cache.html
