@@ -1,125 +1,112 @@
-## Lab 04 - mBaaS APIs - Database Storage
+## Lab 04 - FHC and Local Development
 
 ### Instructions
-1. Navigate to **Projects** area
 
-2. Click on **New Project**
+1. Install Git by following these instructions:
+  https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
-3. Select **AngularJS Hello World Project** template and give your project a unique name
+2. Install NodeJS runtime and *npm*.
 
-4. Click on **Finish**
+  **Mac OSX**
 
-5. Navigate to **Git Quickstart**
+    Download the .pkg from https://nodejs.org/download/ and install. Alternatively you can use *Homebrew* package manager:
 
-6. Clone the cloud app into your local environment
+    ```shell
+    brew install node
+    ```
+
+  **Fedora**
+
+    ```shell
+    yum -y install nodejs npm
+    ```
+
+  **RHEL**
+
+    ```shell
+    rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    yum -y install nodejs npm
+    ```
+
+3. Install FHC (FeedHenry Command Line Interface):
 
   ```shell
-  git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-Cloud-App.git triply-cloud-app
+  npm install -g fh-fhc
   ```
 
-  Note that the git repo url will be different from the one above.
-
-7. Copy the provided cloud-app project onto the cloned git repos
+  On Linux you would need to run this command as root. Verify that *fhc* is installed successfully.
 
   ```shell
-  cp -r lab-04/support/triply-cloud-app/ triply-cloud-app
+  fhc help
   ```
 
-8. Commit and push the changes to the remote git repo
+  You can fine more info on *fhc* configuration (e.g. command completion) in FeedHenry docs:
+  http://docs.feedhenry.com/v3/dev_tools/local/install.html
+
+6. Install *Grunt*. *Grunt* is a task runner used for automation in JavaScript projects the same way Ant and Maven are used in Java projects.
 
   ```shell
-  cd triply-cloud-app
-  git add .
-  git commit -a -m "cloud app added"
-  git push origin master
+  sudo npm install -g grunt-cli
   ```
 
-10. In the root of the cloud app, explore *application.js*. There are two routes defined for working with User and Trips:
+4. In order to get started, you need to set the target FeedHenry platform and login.
 
-  ```javascript
-  app.use('/trips', require('./lib/trips.js')());
-  app.use('/users', require('./lib/users.js')());
-  ```
-
-  Open and explore *lib/trips.js*.
-
-11. Add a *POST* request handler that uses the mBaaS Database Storage API (*$fh.db*) to create a Trip object using the query parameters *from*, *to*, *date*, *userId* and *userName*. The Trip object is persisted in a MongoDB instance on FeedHenry platform.
-
-  ```javascript
-    var options = {
-      "act": "create",
-      "type": "trip",
-      "fields": {
-        "from": req.body.from,
-        "to": req.body.to,
-        date: req.body.date,
-        userId: req.body.userId,
-        userName: req.body.userName
-      }
-    };
-
-    $fh.db(options, function (err, data) {
-      if (err) {
-        console.error("Error " + err);
-        res.json({"result": "error", "message":  err });
-      } else {
-        console.log(JSON.stringify(data));
-        res.json({result: 'success'});
-      }
-    });
-  ```
-
-
-11. Add a *GET* request handler that uses the mBaaS Database Storage API (*$fh.db*) to retrieve and return all Trip objects from the MongoDB database.
-
-  ```javascript
-  var options = {
-    "act": "list",
-    "type": "trip"
-  };
-
-  $fh.db(options, function (err, data) {
-    if (err) {
-      console.error("Error " + err);
-    } else {
-
-      if (data.count == 0) {
-        res.json([]);
-      } else {
-        var list = [];
-        for (var i = 0; i < data.list.length; i++) {
-          list[i] = data.list[i].fields;
-        }
-
-        res.json(list.reverse());
-      }
-    }
-  });
-```
-
-12. Commit and push the changes to the remote git repo.
-
-13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the cloud app project in FeedHenry Studio.
-
-  ![Cloud App Host URL](https://github.com/rhnordics/feedhenry-training/blob/master/images/project-host-url.png?raw=true)
-
-  Add Trip
   ```shell
-  curl -X POST \
-   -H 'Content-Type: application/json' \
-   -d '{"from":"Stockholm", "to":"Bercelona","date":"2015-08-21","userId":"666","userName":"Siamak"}' \
-   https://projectid.feedhenry.com/trips
+  fhc target https://yourdomain.feedhenry.com
+  fhc login [email] [password]
   ```
 
-  List Trips
+  List projects to verify login has been successful:
+
   ```shell
-  curl https://projectid.feedhenry.com/trips
-  # pretty print if python 2.6+ installed
-  curl https://projectid.feedhenry.com/trips | python -m json.tool
+  fhc projects
   ```
 
-14. Now you should be able to add and list Trips through the app in the preview panel or on your device.
+5. Upload your SSH Public Key to FeedHenry in order to be able to work with the git repositories. If you don't already have an SSH key-pair, generate a pair run the following command and confirm the key location and passphrase:
+  ```shell
+  ssh-keygen -t rsa -C "your_email_address@example.com"
+  ```
 
-15. **OPTIONAL** Use the Cache mBaaS API (*$fh.cache*) to cache the list of trips. Make sure the list is invalidated when a new *Trip* object is created. You can find more details on the Cache API in FeedHenry Docs:
+  Using FHC, you can upload your public key to FeedHenry:
 
-  http://docs.feedhenry.com/v3/api/api_cache.html
+  ```shell
+  fhc keys ssh add myKey ~/.ssh/id_rsa.pub
+  ```
+
+  Verify the key is added by listing the uploaded SSH keys:
+
+  ```shell
+  fhc keys ssh
+  ```  
+
+  Managing the SSH keys can also be done in the user **Settings** in **FeedHenry Studio**.
+
+6. Find the id of the project you created in the previous lab by running ```fhc projects | grep [project name]``` and clone that into your local environment.
+
+  ```shell
+  fhc projects clone [project id]
+  ```
+  The above command clones all apps within the project into your local environment.
+
+7. Run the cloud server locally by running Grunt in the root directory of the app. Before that we need to install all required NodeJS dependencies (takes a few min the first time):
+
+  ```shell
+  npm install
+  ```
+
+  Now you can start a local NodeJS server.
+
+  ```shell
+  grunt serve
+  ```
+
+8. Verify the local cloud app server works by pointing your browser to http://localhost:8001/hello?hello=FeedHenry
+
+9. Running the client app locally is done similar to the above.
+
+  ```shell
+  npm install
+  grunt serve:local
+  ```
+
+10. Verify the client app works locally by pointing your browser to http://localhost:9002/?url=http://localhost:8001

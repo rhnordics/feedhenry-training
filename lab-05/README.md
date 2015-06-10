@@ -1,85 +1,125 @@
-## Lab 05 - mBaaS APIs - Cloud
+## Lab 05 - mBaaS APIs - Database Storage
 
 ### Instructions
+1. Navigate to **Projects** area
 
-1. Clone the client app from the previous lab onto your local environment
+2. Click on **New Project**
+
+3. Select **AngularJS Hello World Project** template and give your project a unique name
+
+4. Click on **Finish**
+
+5. Navigate to **Git Quickstart**
+
+6. Clone the cloud app into your local environment
 
   ```shell
-  git clone git@redhat-demos-t.sandbox.feedhenry.com:redhat-demos-t/Triply-App.git triply-app
+  git clone git@yourdomain.feedhenry.com:yourdomain/Triply-Cloud-App.git triply-cloud-app
   ```
 
   Note that the git repo url will be different from the one above.
 
-2. Copy the provided app project onto the cloned git repos
+7. Copy the provided cloud-app project onto the cloned git repos
 
   ```shell
-  cp -r lab-05/support/triply-app/ triply-app
+  cp -r lab-05/support/triply-cloud-app/ triply-cloud-app
   ```
 
-3. Commit and push the changes the remote git repo
+8. Commit and push the changes to the remote git repo
 
   ```shell
-  cd triply-app
+  cd triply-cloud-app
   git add .
-  git commit -a -m "mobile app added"
+  git commit -a -m "cloud app added"
   git push origin master
   ```
 
-4. Check out the app in the **Preview** panel in **FeedHenry Studio** and try to create a new Trip. The Trip list won't get updated since it's not wired to the backend (that's what you will be doing next!)
-
-  ![Triply App](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-trips-empty.png?raw=true)
-
-
-5. Open *www/trip-list.html* and add a cloud call using the Cloud API (*$fh.cloud*) in order to retrieve the list of Trips.
+10. In the root of the cloud app, explore *application.js*. There are two routes defined for working with User and Trips:
 
   ```javascript
-  $fh.cloud({
-    "path": "/trips",
-    "method": "GET",
-    "contentType": "application/json",
-    "timeout": 10000
-  }, function(res) {
-    document.querySelector('trip-list').trips = res;
-
-  }, function(msg,err) {
-    console.log(err);
-  });
+  app.use('/trips', require('./lib/trips.js')());
+  app.use('/users', require('./lib/users.js')());
   ```
 
-6. Open *www/trip-add.html* and using the Cloud API (*$fh.cloud*), add a cloud call to save the new Trip.
+  Open and explore *lib/trips.js*.
+
+11. Add a *POST* request handler that uses the mBaaS Database Storage API (*$fh.db*) to create a Trip object using the query parameters *from*, *to*, *date*, *userId* and *userName*. The Trip object is persisted in a MongoDB instance on FeedHenry platform.
 
   ```javascript
-  $fh.cloud({
-    "path": "/trips",
-    "method": "POST",
-    "data": { "from": this.from, "to": this.to, "date": this.date, "userId": this.$.globals.values.user.id, "userName": this.$.globals.values.user.name },
-    "contentType": "application/json",
-    "timeout": 10000
-  }, function(res) {
-  }, function(msg,err) {
-  });
+    var options = {
+      "act": "create",
+      "type": "trip",
+      "fields": {
+        "from": req.body.from,
+        "to": req.body.to,
+        date: req.body.date,
+        userId: req.body.userId,
+        userName: req.body.userName
+      }
+    };
+
+    $fh.db(options, function (err, data) {
+      if (err) {
+        console.error("Error " + err);
+        res.json({"result": "error", "message":  err });
+      } else {
+        console.log(JSON.stringify(data));
+        res.json({result: 'success'});
+      }
+    });
   ```
 
-7. Commit and push the changes the remote git repo.
 
-8. Verify adding new Trips and Trip list works properly in the Preview panel in FeedHenry Studio. Alternative install the app on your device to verify the functionality.
-
-9. The app currently doesn't include user registration. Enable the registration view by adding the following snippet to the end of the last ```<script>``` block in . Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
+11. Add a *GET* request handler that uses the mBaaS Database Storage API (*$fh.db*) to retrieve and return all Trip objects from the MongoDB database.
 
   ```javascript
-  window.addEventListener('polymer-ready', function(e) {
-    if (globals.isUserVerified()) { // already registered and verified
-      globals.load();
-      pages.selected = 0;
+  var options = {
+    "act": "list",
+    "type": "trip"
+  };
+
+  $fh.db(options, function (err, data) {
+    if (err) {
+      console.error("Error " + err);
     } else {
-      pages.selected = 2;
+
+      if (data.count == 0) {
+        res.json([]);
+      } else {
+        var list = [];
+        for (var i = 0; i < data.list.length; i++) {
+          list[i] = data.list[i].fields;
+        }
+
+        res.json(list.reverse());
+      }
     }
   });
+```
+
+12. Commit and push the changes to the remote git repo.
+
+13. Use a REST client or *curl* to verify that the *trips* API works correctly. Replace the host with your cloud app url which is listed under *Details* tab in the cloud app project in FeedHenry Studio.
+
+  ![Cloud App Host URL](https://github.com/rhnordics/feedhenry-training/blob/master/images/project-host-url.png?raw=true)
+
+  Add Trip
+  ```shell
+  curl -X POST \
+   -H 'Content-Type: application/json' \
+   -d '{"from":"Stockholm", "to":"Bercelona","date":"2015-08-21","userId":"666","userName":"Siamak"}' \
+   https://projectid.feedhenry.com/trips
   ```
 
-9. Commit and push the changes the remote git repo and check out the app in the **Preview**. Try to register with your name and mobile number. The backend is not connected to any SMS service yet. In order to verify your account go to **FeedHenry Studio** and **Data Browser** in triply-cloud-app. Find the verification code and enter the code to verify your account.
+  List Trips
+  ```shell
+  curl https://projectid.feedhenry.com/trips
+  # pretty print if python 2.6+ installed
+  curl https://projectid.feedhenry.com/trips | python -m json.tool
+  ```
 
-  ![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-register.png?raw=true)
-  ![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-verification.png?raw=true)
+14. Now you should be able to add and list Trips through the app in the preview panel or on your device.
 
-10. **OPTIONAL Install** the app on your phone!
+15. **OPTIONAL** Use the Cache mBaaS API (*$fh.cache*) to cache the list of trips. Make sure the list is invalidated when a new *Trip* object is created. You can find more details on the Cache API in FeedHenry Docs:
+
+  http://docs.feedhenry.com/v3/api/api_cache.html

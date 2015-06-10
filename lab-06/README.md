@@ -1,57 +1,85 @@
-## Lab 06 - mBaaS Services
-
-The registration form currently generates a verification code and persist it in the Mongo database. An SMS needs to be sent to the user with the generated code in order to verify the registered mobile number. Twilio which is a cloud-based API for text messaging will be used for this purpose.
+## Lab 06 - mBaaS APIs - Cloud
 
 ### Instructions
 
-1. In FeedHenry Studio click on **Services & APIs** on the top menu.
+1. Clone the client app from the previous lab onto your local environment
 
-2. Browse the list of mBaaS Services and check if a Twilio service already exists. Skip to step 5 if it is already listed.
-
-3. Click on **Provision mBaaS Service/API** to create a new mBaaS service. Browse the list of available mBaaS Service implementations and choose **Twilio Connector** which is ready-to-use connector for Twilio APIs. Specify a name and click **Next**. Fill in the configuration settings and click on **Next** and then **Finish**.
-
-4. Currently there is a bug in the platform that fails to create environment variables for the configuration settings. Go to **Environment Variables** and create the following environment variables. Click on **Push Environment Variables** afterwards. Verify Twilio service works by using the api browser in **Docs**.
-
-  Environment Variables:
-  * TWILIO_NUMBER
-  * TWILIO_AUTH
-  * TWILIO_SID
-
-5. Go the **Apps, Cloud Apps & Services** of Triply project
-
-6. Click on the plus sign on the right-most column **mBaaS Services** and pick the **Twilio** service created above. Click on **Associate Services** to add that mBaaS service to the project.
-
-  ![Triply Apps](https://github.com/rhnordics/feedhenry-training/blob/master/images/project-apps.png?raw=true)
-
-7. We need to modify the cloud app to use the Twilio service for sending the verification code to the user as an SMS.
-
-8. Open *lib/users.js* and use the *fh.service* App Cloud API, in order to use the Twilio mBaaS Service added above for sending the SMS. Notice the *TWILIO_SERVICE_ID* environment variable used in the code. We will define the value for this environment variable in the following steps.
-
-  ```javascript
-  $fh.service({
-    "guid": process.env.TWILIO_SERVICE_ID,
-    "path": "/cloud/sms",
-    "method": "POST",
-    "params": {
-      "to": mobile,
-      "body": 'Verification code ' + code + ' /Triply'
-      }
-  }, function(err, body, res) {
-    if (err) {
-      // An error occurred
-      console.log('Twilio service call failed: ', err);
-    } else {
-      console.log('Twilio response Body: ', body);
-    }
-  });
-
-  res.json({"result": "success", "user":  user });
+  ```shell
+  git clone git@yourdomain.feedhenry.com:yourdomain/Triply-App.git triply-app
   ```
 
-  You can read more on *$fh.service* API in FeedHenry Docs: http://docs.feedhenry.com/v3/api/cloud_api.html#cloud_api-_fh_service
+  Note that the git repo url will be different from the one above.
 
-9. Commit and push the changes to the remote git repo
+2. Copy the provided app project onto the cloned git repos
 
-10. Go to **FeedHenry Studio** and **Environment Variables** tab in the Triply cloud app. Add an environment variable with *TWILIO_SERVICE_ID* as the name and the service id of the Twilio mBaaS Service you created in the beginning of this lab as the value. You can find the Service ID under the **Details** tab of the Twilio service project. Click on **Push Environment Variables** when done.
+  ```shell
+  cp -r lab-06/support/triply-app/ triply-app
+  ```
 
-11. Go to **Docs** tab and test the cloud app API to verify the SMS function works.
+3. Commit and push the changes the remote git repo
+
+  ```shell
+  cd triply-app
+  git add .
+  git commit -a -m "mobile app added"
+  git push origin master
+  ```
+
+4. Check out the app in the **Preview** panel in **FeedHenry Studio** and try to create a new Trip. The Trip list won't get updated since it's not wired to the backend (that's what you will be doing next!)
+
+  ![Triply App](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-trips-empty.png?raw=true)
+
+
+5. Open *www/trip-list.html* and add a cloud call using the Cloud API (*$fh.cloud*) in order to retrieve the list of Trips.
+
+  ```javascript
+  $fh.cloud({
+    "path": "/trips",
+    "method": "GET",
+    "contentType": "application/json",
+    "timeout": 10000
+  }, function(res) {
+    document.querySelector('trip-list').trips = res;
+
+  }, function(msg,err) {
+    console.log(err);
+  });
+  ```
+
+6. Open *www/trip-add.html* and using the Cloud API (*$fh.cloud*), add a cloud call to save the new Trip.
+
+  ```javascript
+  $fh.cloud({
+    "path": "/trips",
+    "method": "POST",
+    "data": { "from": this.from, "to": this.to, "date": this.date, "userId": this.$.globals.values.user.id, "userName": this.$.globals.values.user.name },
+    "contentType": "application/json",
+    "timeout": 10000
+  }, function(res) {
+  }, function(msg,err) {
+  });
+  ```
+
+7. Commit and push the changes the remote git repo.
+
+8. Verify adding new Trips and Trip list works properly in the Preview panel in FeedHenry Studio. Alternative install the app on your device to verify the functionality.
+
+9. The app currently doesn't include user registration. Enable the registration view by adding the following snippet to the end of the last ```<script>``` block in . Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
+
+  ```javascript
+  window.addEventListener('polymer-ready', function(e) {
+    if (globals.isUserVerified()) { // already registered and verified
+      globals.load();
+      pages.selected = 0;
+    } else {
+      pages.selected = 2;
+    }
+  });
+  ```
+
+9. Commit and push the changes the remote git repo and check out the app in the **Preview**. Try to register with your name and mobile number. The backend is not connected to any SMS service yet. In order to verify your account go to **FeedHenry Studio** and **Data Browser** in triply-cloud-app. Find the verification code and enter the code to verify your account.
+
+  ![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-register.png?raw=true)
+  ![Triply App Registration](https://github.com/rhnordics/feedhenry-training/blob/master/images/preview-verification.png?raw=true)
+
+10. **OPTIONAL Install** the app on your phone!
