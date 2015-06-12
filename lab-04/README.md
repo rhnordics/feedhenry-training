@@ -5,6 +5,8 @@
 1. Install Git by following these instructions:
   https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
+  **For Mac users**: add *'alias git="/usr/local/git/bin/git"'* to your terminal (for example in *.bashrc*) in order to skip installing Xcode when using *git*.
+
 2. Install NodeJS runtime and *npm*.
 
   **Mac OSX**
