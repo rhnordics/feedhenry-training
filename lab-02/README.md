@@ -8,7 +8,7 @@
 
 4. Select **Hello World Project** template
 
-5. Click on **Finish**
+5. Click on **Create** and then **Finish**
 
 6. Explore the project
 
@@ -50,5 +50,7 @@
 
 11. Verify the the **bye** endpoint works in the browser by going to:
 *http://appdomain/bye?bye=North*
+
+  The *appdomain* for your cloud app is listed on the **Details** tab of the cloud app, under **Current Host**
 
 12. **OPTIONAL** Modify *README.md* to generate docs for the */bye* REST endpoint

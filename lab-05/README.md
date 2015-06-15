@@ -107,7 +107,7 @@
   ```shell
   curl -X POST \
    -H 'Content-Type: application/json' \
-   -d '{"from":"Stockholm", "to":"Bercelona","date":"2015-08-21","userId":"666","userName":"Siamak"}' \
+   -d '{"from":"Stockholm", "to":"Barcelona","date":"2015-08-21","userId":"666","userName":"Siamak"}' \
    https://projectid.feedhenry.com/trips
   ```
 

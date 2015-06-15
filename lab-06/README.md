@@ -64,7 +64,7 @@
 
 8. Verify adding new Trips and Trip list works properly in the Preview panel in FeedHenry Studio. Alternative install the app on your device to verify the functionality.
 
-9. The app currently doesn't include user registration. Enable the registration view by adding the following snippet to the end of the last ```<script>``` block in . Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
+9. The app currently doesn't include user registration. Enable the registration view by adding the following snippet to the end of the last ```<script>``` block in *index.html*. Explore *www/user-register.html* and *www/user-verify.html* to locate the cloud calls for registration and verification of user's identity.
 
   ```javascript
   window.addEventListener('polymer-ready', function(e) {
